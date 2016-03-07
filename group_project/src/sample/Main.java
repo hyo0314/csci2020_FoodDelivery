@@ -3,13 +3,13 @@ package sample;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -21,51 +21,47 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Food Delivery App");
-
-        /*Image background = new Image("background-food.jpg");
-
-        ImageView BGImage = new ImageView();
-        BGImage.setImage(background);
-        BGImage.setFitWidth(200);
-        BGImage.setSmooth(true);
-
-        Group imageRoot = new Group();
-        //Scene scene1 = new Scene(imageRoot);
-        HBox hbox = new HBox();
-        hbox.getChildren().add(BGImage);
-        imageRoot.getChildren().add(hbox);*/
 
 
         layout = new BorderPane();
 
-        GridPane editArea = new GridPane();
-        editArea.setPadding(new Insets(10, 10, 10, 10));
-        editArea.setVgap(10);
-        editArea.setHgap(10);
+        GridPane textArea = new GridPane();
+        textArea.setPadding(new Insets(10, 10, 10, 10));
+        textArea.setVgap(10);
+        textArea.setHgap(10);
 
-        Label nameLabel = new Label("Enter Restaurant Name:");
-        editArea.add(nameLabel, 25, 40);
+        Label nameLabel = new Label("\t\tEnter Restaurant Name:");
+        textArea.add(nameLabel, 25, 5);
         TextField nameField = new TextField();
         nameField.setPromptText("restaurant name here");
-        editArea.add(nameField, 25, 41);
+        textArea.add(nameField, 25, 6);
 
-
-        Button addButton = new Button("Go");
+        ImageView buttonImage = new ImageView(new Image(Main.class.getResourceAsStream("go.jpg")));
+        buttonImage.setFitWidth(200);
+        buttonImage.setFitHeight(100);
+        Button addButton = new Button("", buttonImage);
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 String restaurantName = nameField.getText();
 
 
                 nameField.setText("");
-
+                System.out.println(restaurantName);
             }
         });
-        editArea.add(addButton, 25, 43);
+        textArea.add(addButton, 25, 8);
 
-        layout.setCenter(editArea);
-        Scene scene = new Scene(layout, 700, 700);
+        GridPane imageArea = new GridPane();
+        ImageView image = new ImageView(new Image(Main.class.getResourceAsStream("background-food.jpg")));
+        image.setFitWidth(750);
+        image.setFitHeight(300);
+        imageArea.add(image, 0, 0, 1, 2);
+
+
+        layout.setTop(imageArea);
+        layout.setCenter(textArea);
+        Scene scene = new Scene(layout, 750, 700);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
