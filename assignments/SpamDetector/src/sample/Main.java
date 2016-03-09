@@ -7,123 +7,72 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 
-
 public class Main extends Application {
-
+    private DecimalFormat df = new DecimalFormat("#.00000000000");
     private TableView<TestFile> testFileTable;
     private BorderPane layout;
-    private FileInputStream input = null;
-    private FileOutputStream output = null;
+    private File dataDir;
+
     private Map<String,Integer> wordCountsTotalHam;
     private Map<String,Integer> wordCountsTotalSpam;
-    private File dataDir;
+    private Map<String,Integer> tempCounts;
     private Map<String,Integer> hamCounts;
-
     private Map<String,Integer> spamCounts;
-    private int totalNumHam;
-    private int totalNumSpam;
     private Map<String,Double> probWS;
     private Map<String,Double> probWH;
     private Map<String,Double> probSW;
+    private Map<String,Double> hamTest;
 
+    private double totalNumHam;
+    private double totalNumSpam;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
-        totalNumHam = 0;
-        totalNumSpam = 0;
-
-        wordCountsTotalHam = new TreeMap<>();
-        dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham/");
-        System.out.println(dataDir);
-
-        try {
-
-            processFile(dataDir);
-            dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham2/");
-            processFile(dataDir);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-        //System.out.println(totalNumHam);
-        hamCounts = new TreeMap<>();
-        try {
-            dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham/");
-            processFileForHamOne(dataDir);
-            dataDir =new File("~/Desktop/FoodDelivery/assignment/data/train/ham2/");
-            processFileForHamOne(dataDir);
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(totalNumHam);
-        Set<String> keys = hamCounts.keySet();
-        Iterator<String> keyIterator = keys.iterator();
-
-        while(keyIterator.hasNext()) {
-
-            String key = keyIterator.next();
-            int count = hamCounts.get(key);
-            System.out.println(key + " " + count);
-        }
-
+        tempCounts = new TreeMap<>();
         wordCountsTotalSpam = new TreeMap<>();
-        dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/spam/");
-        System.out.println(dataDir);
-
-        try {
-
-            processFileTotalSpam(dataDir);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
         spamCounts = new TreeMap<>();
-        try {
-
-            processSpam(dataDir);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("------------------------------------------------");
-        System.out.println(totalNumSpam);
-        Set<String> keySpam = spamCounts.keySet();
-        Iterator<String> keyIteratorSpam = keySpam.iterator();
-
-        while(keyIteratorSpam.hasNext()) {
-
-            String key = keyIteratorSpam.next();
-            int count = spamCounts.get(key);
-            System.out.println(key + " " + count);
-        }
-
-        //Probability
+        wordCountsTotalHam = new TreeMap<>();
+        hamCounts = new TreeMap<>();
         probWS = new TreeMap<>();
         probWH = new TreeMap<>();
         probSW = new TreeMap<>();
-        prWS();
+        hamTest = new TreeMap<>();
+        totalNumHam = 0;
+        totalNumSpam = 0;
 
+        try {
+            dataDir = new File("/home/mobile/Desktop/FoodDelivery/csci2020_FoodDelivery/assignments/data/train/ham/");
+            processFile(dataDir);
+            dataDir = new File("/home/mobile/Desktop/FoodDelivery/csci2020_FoodDelivery/assignments/data/train/ham2/");
+            processFile(dataDir);
+
+            dataDir = new File("/home/mobile/Desktop/FoodDelivery/csci2020_FoodDelivery/assignments/data/train/ham/");
+            processFileForHamOne(dataDir);
+            dataDir =new File("/home/mobile/Desktop/FoodDelivery/csci2020_FoodDelivery/assignments/data/train/ham2/");
+            processFileForHamOne(dataDir);
+
+            dataDir = new File("/home/mobile/Desktop/FoodDelivery/csci2020_FoodDelivery/assignments/data/train/spam/");
+            processFileTotalSpam(dataDir);
+
+            processSpam(dataDir);
+
+            prWS();
+            prWH();
+            prSW();
+
+            File hamFile = new File("/home/mobile/Desktop/FoodDelivery/csci2020_FoodDelivery/assignments/data/test/spam/");
+            testingHam(hamFile);
+            finalProbHam();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Codes for Table
         primaryStage.setTitle("Spam Detector 3000");
@@ -159,6 +108,87 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    public void finalProbHam()
+    {
+        Set<String> keys = hamTest.keySet();
+        Iterator<String> keyIterator = keys.iterator();
+
+        while(keyIterator.hasNext()) {
+            String key = keyIterator.next();
+            double count = hamTest.get(key);
+            //System.out.println(count);
+            double finalProb = 1/(1+Math.pow(Math.E, count));
+
+            System.out.println(df.format(finalProb));
+            if(hamTest.containsKey(key))
+            {
+                hamTest.put(key, finalProb);
+            }
+        }
+
+    }
+
+    //Each File probability in Ham folder
+    public void calculateHam(String str, File file)
+    {
+        if(probSW.containsKey(str))
+        {
+            double n = Math.log(1-probSW.get(str)) - Math.log(probSW.get(str));
+
+            //System.out.println(df.format(n));
+            if (hamTest.containsKey(file.getName())) {
+
+                double temp = hamTest.get(file.getName());
+                hamTest.put(file.getName(), temp + n);
+            } else {
+
+                hamTest.put(file.getName(), n);
+            }
+        }
+
+
+    }
+
+    public void testingHam(File file)throws IOException {
+
+        if (file.isDirectory()) {
+            // process all of the files recursively
+            File[] filesInDir = file.listFiles();
+            for (int i = 0; i < filesInDir.length; i++) {
+
+                testingHam(filesInDir[i]);
+
+
+            }
+        } else if (file.exists()) {
+            Scanner scanner = new Scanner(file);
+
+            while(scanner.hasNext())
+            {
+                String word = scanner.next();
+
+
+                if(isWord(word))
+                {
+                    isInHam(word,file);
+                }
+            }
+
+            if(!scanner.hasNext())
+                tempCounts.clear();
+
+        }
+    }
+
+    public void isInHam(String str,File file)
+    {
+        if(!tempCounts.containsKey(str))
+        {
+            tempCounts.put(str,1);
+            calculateHam(str,file);
+        }
+    }
+
     //probability of Spam files (Train)
     public void prWS()
     {
@@ -168,30 +198,77 @@ public class Main extends Application {
         while(keyIteratorSpam.hasNext()) {
 
             String key = keyIteratorSpam.next();
-            int count = spamCounts.get(key);
+            double count = spamCounts.get(key);
 
-            wordCountsTotalSpam.put(key, count/totalNumSpam);
+            probWS.put(key, count/totalNumSpam);
         }
+
+        //System.out.println(probWS.toString());
     }
 
     //probability of Ham files (Train)
     public void prWH()
     {
-        Set<String> keySpam = hamCounts.keySet();
+        //System.out.println(totalNumHam);
+       // System.out.println(hamCounts.toString());
+        Set<String> keyHam = hamCounts.keySet();
+        Iterator<String> keyIteratorSpam = keyHam.iterator();
+
+        while(keyIteratorSpam.hasNext()) {
+
+            String key = keyIteratorSpam.next();
+            double count = hamCounts.get(key);
+
+            probWH.put(key, count/totalNumHam);
+        }
+
+        //System.out.println(probWH.toString());
+    }
+
+    //probability of total spam
+    public void prSW()
+    {
+        Set<String> keySpam = probWS.keySet();
         Iterator<String> keyIteratorSpam = keySpam.iterator();
 
         while(keyIteratorSpam.hasNext()) {
 
             String key = keyIteratorSpam.next();
-            int count = hamCounts.get(key);
+            double count = probWS.get(key);
+            double totalCount = 0.0;
+            if(!probWH.containsKey(key)) {
 
-            wordCountsTotalSpam.put(key, count/totalNumHam);
+                probSW.put(key, 1.0);
+            }
+            else
+            {
+                totalCount= count/(count + probWH.get(key));
+                probSW.put(key,totalCount);
+            }
+
         }
-    }
 
-    public void prSW()
-    {
-        
+
+       /* Set<String> keyHam = probWH.keySet();
+        Iterator<String> keyIteratorHam = keyHam.iterator();
+
+        while(keyIteratorHam.hasNext())
+        {
+            String key = keyIteratorHam.next();
+            if(!probSW.containsKey(key))
+                probSW.put(key,(double)0);
+        }*/
+
+        /*Set<String> b = probSW.keySet();
+        Iterator<String> c = b.iterator();
+
+        while(c.hasNext())
+        {
+            String key = c.next();
+            double count = probSW.get(key);
+
+            System.out.println(key + " " + count);
+        }*/
     }
 
 
@@ -209,42 +286,28 @@ public class Main extends Application {
         } else if (file.exists()) {
             Scanner scanner = new Scanner(file);
 
-           String eachFile = "";
-
-
             while (scanner.hasNext()) {
                 String word = scanner.next();
 
                 if(isWord(word) )
                 {
-
-                   if(isFile(word) && eachFile.indexOf(word)<0)
-                   {
-                       eachFile += word + " ";
-
-                       countFileHamOne(word);
-
-                   }
+                    isFile(word);
                 }
 
+
             }
+            if(!scanner.hasNext())
+                tempCounts.clear();
 
         }
     }
 
-    public boolean isFile(String str)
+    public void isFile(String str)
     {
-        Set<String> keys = wordCountsTotalHam.keySet();
-        Iterator<String> keyIterator = keys.iterator();
-
-        while(keyIterator.hasNext()) {
-            String key = keyIterator.next();
-            // System.out.println(key);
-            if(str.equals(key))
-                return true;
+        if(!tempCounts.containsKey(str)) {
+            tempCounts.put(str, 1);
+            countFileHamOne(str);
         }
-
-        return false;
     }
 
     public void countFileHamOne(String str)
@@ -281,13 +344,11 @@ public class Main extends Application {
                 if(isWord(word) )
                 {
 
-                    if(isFileSpam(word) && eachFile.indexOf(word)<0)
-                    {
-                        eachFile += word + " ";
-
-                        countFileSpam(word);
-
-                    }
+                   isFileSpam(word);
+                }
+                if(!scanner.hasNext())
+                {
+                    tempCounts.clear();
                 }
 
             }
@@ -295,19 +356,13 @@ public class Main extends Application {
         }
     }
 
-    public boolean isFileSpam(String str)
+    public void isFileSpam(String str)
     {
-        Set<String> keys = wordCountsTotalSpam.keySet();
-        Iterator<String> keyIterator = keys.iterator();
-
-        while(keyIterator.hasNext()) {
-            String key = keyIterator.next();
-            // System.out.println(key);
-            if(str.equals(key))
-                return true;
-        }
-
-        return false;
+       if(!tempCounts.containsKey(str))
+       {
+           tempCounts.put(str,1);
+           countFileSpam(str);
+       }
     }
 
 
@@ -401,6 +456,7 @@ public class Main extends Application {
 
             wordCountsTotalSpam.put(word, 1);
         }
+
 
     }
 
