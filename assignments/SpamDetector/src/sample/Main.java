@@ -39,14 +39,14 @@ public class Main extends Application {
         totalNumSpam = 0;
 
         wordCountsTotalHam = new TreeMap<>();
-        dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham/");
-        System.out.println(dataDir);
+        dataDir = new File("C:\\Users\\100604449\\Documents\\GitHub\\csci2020_FoodDelivery\\assignments\\data\\train\\ham");
+        File hamDir = new File("C:\\Users\\100604449\\Documents\\GitHub\\csci2020_FoodDelivery\\assignments\\hamword.txt");
 
         try {
 
             processFile(dataDir);
-            dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham2/");
-            processFile(dataDir);
+            printFreq(2, hamDir);
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -59,11 +59,8 @@ public class Main extends Application {
         //System.out.println(totalNumHam);
         hamCounts = new TreeMap<>();
         try {
-            dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham/");
+            dataDir = new File("C:\\Users\\100604449\\Documents\\GitHub\\csci2020_FoodDelivery\\assignments\\data\\train\\ham");
             processFileForHamOne(dataDir);
-            dataDir =new File("~/Desktop/FoodDelivery/assignment/data/train/ham2/");
-            processFileForHamOne(dataDir);
-
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -71,22 +68,11 @@ public class Main extends Application {
             e.printStackTrace();
         }
         System.out.println(totalNumHam);
-        Set<String> keys = hamCounts.keySet();
-        Iterator<String> keyIterator = keys.iterator();
-
-        while(keyIterator.hasNext()) {
-
-            String key = keyIterator.next();
-            int count = hamCounts.get(key);
-            System.out.println(key + " " + count);
-        }
 
         wordCountsTotalSpam = new TreeMap<>();
-        dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/spam/");
-        System.out.println(dataDir);
+        dataDir = new File("C:\\Users\\100604449\\Documents\\GitHub\\csci2020_FoodDelivery\\assignments\\data\\train\\spam");
 
         try {
-
             processFileTotalSpam(dataDir);
 
         } catch (FileNotFoundException e) {
@@ -98,7 +84,6 @@ public class Main extends Application {
 
         spamCounts = new TreeMap<>();
         try {
-
             processSpam(dataDir);
 
         } catch (FileNotFoundException e) {
@@ -118,11 +103,17 @@ public class Main extends Application {
             System.out.println(key + " " + count);
         }
 
+
         //Probability
         probWS = new TreeMap<>();
         probWH = new TreeMap<>();
         probSW = new TreeMap<>();
         prWS();
+        prWH();
+
+
+        System.out.println(probWS.toString());
+        System.out.println(probWH.toString());
 
 
         //Codes for Table
@@ -170,7 +161,9 @@ public class Main extends Application {
             String key = keyIteratorSpam.next();
             int count = spamCounts.get(key);
 
-            wordCountsTotalSpam.put(key, count/totalNumSpam);
+            probWS.put(key, (double)count/totalNumSpam);
+
+
         }
     }
 
@@ -185,7 +178,7 @@ public class Main extends Application {
             String key = keyIteratorSpam.next();
             int count = hamCounts.get(key);
 
-            wordCountsTotalSpam.put(key, count/totalNumHam);
+            probWH.put(key, (double)count/totalNumHam);
         }
     }
 
@@ -203,14 +196,11 @@ public class Main extends Application {
             for (int i = 0; i < filesInDir.length; i++) {
                 totalNumHam++;
                 processFileForHamOne(filesInDir[i]);
-
-
             }
         } else if (file.exists()) {
             Scanner scanner = new Scanner(file);
 
            String eachFile = "";
-
 
             while (scanner.hasNext()) {
                 String word = scanner.next();
@@ -223,12 +213,9 @@ public class Main extends Application {
                        eachFile += word + " ";
 
                        countFileHamOne(word);
-
                    }
                 }
-
             }
-
         }
     }
 
@@ -239,7 +226,6 @@ public class Main extends Application {
 
         while(keyIterator.hasNext()) {
             String key = keyIterator.next();
-            // System.out.println(key);
             if(str.equals(key))
                 return true;
         }
@@ -325,9 +311,6 @@ public class Main extends Application {
     }
 
 
-
-
-
     //word count methods
     //process all files
     public void processFile(File file) throws IOException {
@@ -374,10 +357,7 @@ public class Main extends Application {
             // process all of the files recursively
             File[] filesInDir = file.listFiles();
             for (int i = 0; i < filesInDir.length; i++) {
-
                 processFileTotalSpam(filesInDir[i]);
-
-
             }
         } else if (file.exists()) {
             // load all of the data, and process it into words
@@ -401,7 +381,6 @@ public class Main extends Application {
 
             wordCountsTotalSpam.put(word, 1);
         }
-
     }
 
     //checking
@@ -412,6 +391,28 @@ public class Main extends Application {
         }
         return false;
     }
+    public void printFreq(int minCount, File outputFile) throws FileNotFoundException {
+        System.out.println("Saving word counts to " + outputFile.getAbsolutePath());
+        if (!outputFile.exists() || outputFile.canWrite()) {
+            PrintWriter fout = new PrintWriter(outputFile);
+
+            Set<String> keys = probWH.keySet();
+            Iterator<String> keyIterator = keys.iterator();
+
+
+            while(keyIterator.hasNext()) {
+                String key = keyIterator.next();
+                double count = probWH.get(key);
+                if (count >= minCount) {
+                    fout.println(key + ": " + count);
+                }
+            }
+            fout.close();
+        } else {
+            System.err.println("Cannot write to output file");
+        }
+    }
+
 
 
     public static void main(String[] args) {
