@@ -27,6 +27,9 @@ public class Main extends Application {
     private Map<String,Integer> spamCounts;
     private int totalNumHam;
     private int totalNumSpam;
+    private Map<String,Double> probWS;
+    private Map<String,Double> probWH;
+    private Map<String,Double> probSW;
 
 
     @Override
@@ -36,13 +39,13 @@ public class Main extends Application {
         totalNumSpam = 0;
 
         wordCountsTotalHam = new TreeMap<>();
-        dataDir = new File("/home/mobile/Desktop/FoodDelivery/assignment/data/train/ham/");
+        dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham/");
         System.out.println(dataDir);
 
         try {
 
             processFile(dataDir);
-            dataDir = new File("/home/mobile/Desktop/FoodDelivery/assignment/data/train/ham2/");
+            dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham2/");
             processFile(dataDir);
 
         } catch (FileNotFoundException e) {
@@ -56,9 +59,9 @@ public class Main extends Application {
         //System.out.println(totalNumHam);
         hamCounts = new TreeMap<>();
         try {
-            dataDir = new File("/home/mobile/Desktop/FoodDelivery/assignment/data/train/ham/");
+            dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/ham/");
             processFileForHamOne(dataDir);
-            dataDir =new File("/home/mobile/Desktop/FoodDelivery/assignment/data/train/ham2/");
+            dataDir =new File("~/Desktop/FoodDelivery/assignment/data/train/ham2/");
             processFileForHamOne(dataDir);
 
 
@@ -79,7 +82,7 @@ public class Main extends Application {
         }
 
         wordCountsTotalSpam = new TreeMap<>();
-        dataDir = new File("/home/mobile/Desktop/FoodDelivery/assignment/data/train/spam/");
+        dataDir = new File("~/Desktop/FoodDelivery/assignment/data/train/spam/");
         System.out.println(dataDir);
 
         try {
@@ -115,7 +118,14 @@ public class Main extends Application {
             System.out.println(key + " " + count);
         }
 
+        //Probability
+        probWS = new TreeMap<>();
+        probWH = new TreeMap<>();
+        probSW = new TreeMap<>();
+        prWS();
 
+
+        //Codes for Table
         primaryStage.setTitle("Spam Detector 3000");
 
         testFileTable = new TableView<>();
@@ -148,6 +158,42 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+    //probability of Spam files (Train)
+    public void prWS()
+    {
+        Set<String> keySpam = spamCounts.keySet();
+        Iterator<String> keyIteratorSpam = keySpam.iterator();
+
+        while(keyIteratorSpam.hasNext()) {
+
+            String key = keyIteratorSpam.next();
+            int count = spamCounts.get(key);
+
+            wordCountsTotalSpam.put(key, count/totalNumSpam);
+        }
+    }
+
+    //probability of Ham files (Train)
+    public void prWH()
+    {
+        Set<String> keySpam = hamCounts.keySet();
+        Iterator<String> keyIteratorSpam = keySpam.iterator();
+
+        while(keyIteratorSpam.hasNext()) {
+
+            String key = keyIteratorSpam.next();
+            int count = hamCounts.get(key);
+
+            wordCountsTotalSpam.put(key, count/totalNumHam);
+        }
+    }
+
+    public void prSW()
+    {
+        
+    }
+
 
     public void processFileForHamOne(File file) throws IOException {
 
