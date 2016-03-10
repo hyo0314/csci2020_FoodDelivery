@@ -183,7 +183,7 @@ public class Main extends Application {
             //Table Colume for file name
             TableColumn<TestFile,String> fileColumn = null;
             fileColumn = new TableColumn<>("File");
-            fileColumn.setMinWidth(300);
+            fileColumn.setMinWidth(400);
             fileColumn.setCellValueFactory(new PropertyValueFactory<TestFile,String>("filename"));
 
             //Table Column for the spam probability
@@ -231,7 +231,7 @@ public class Main extends Application {
             layout.setCenter(testFileTable);
             layout.setBottom(resultArea);
 
-            Scene scene = new Scene(layout, 700, 700);
+            Scene scene = new Scene(layout, 900, 900);
             primaryStage.setScene(scene);
             primaryStage.show();
 
