@@ -42,7 +42,7 @@ public class FileServer {
             }
 
             //getting the information from the client. when the client makes the action, this wll help client to do their work.
-            public synchronized void ClientConnectionHandler()  {
+            public void ClientConnectionHandler()  {
                 try {
                     BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
@@ -72,7 +72,7 @@ public class FileServer {
 
             //sendDirectiory method is when client opens the firesharing system and we give the file list to the window
             //that client opened.
-            private synchronized void sendDirectory()
+            private void sendDirectory()
             {
                 System.out.println("Sending directory contents...");
                 ArrayList<File> directoryFiles = new ArrayList<>();
@@ -91,6 +91,7 @@ public class FileServer {
                     }
 
                     //we disconnect client from the server.
+                    fileOut.close();
                     client.close();
                 }
                 catch (IOException e)
@@ -102,7 +103,7 @@ public class FileServer {
 
             //uploadFile method is when client clicks the upload button, then from the client/Main.java will send the file names and contents
             //of the selected file by client
-            private synchronized void uploadFile(String filename) throws IOException
+            private void uploadFile(String filename) throws IOException
             {
                 System.out.println("Uploading " + filename + " from client to server...");
                 focusedFile = new File(serverDirectory.getPath() + "/" + filename);
@@ -131,7 +132,7 @@ public class FileServer {
             }
 
             //DownloadFile method is when client clicks the download button then server will give the file name and file contents to the Main.java
-            private synchronized void downloadFile(String filename) throws IOException
+            private void downloadFile(String filename) throws IOException
             {
                 System.out.println("Downloading " + filename + " from server to client...");
                 BufferedReader in = new BufferedReader(new FileReader(serverDirectory.getPath() + "/" + filename));

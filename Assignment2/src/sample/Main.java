@@ -92,6 +92,7 @@ public class Main extends Application {
                         connection();
                         out.println("UPLOAD");
                         out.flush();
+
                         out.println(fileinfo.getFileNames());
                         out.flush();
 
@@ -144,6 +145,7 @@ public class Main extends Application {
 
                     //give "DOWNLOAD" to Server as parameter and the file name to server as well
                     out.println("DOWNLOAD");
+                    out.flush();
                     out.println(downloadFileName);
                     out.flush();
 
