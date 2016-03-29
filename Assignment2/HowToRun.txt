@@ -1,0 +1,14 @@
+Assignment 2 File Sharing
+
+GROUP MEMBER : HYO KIM(100560568), M
+
+Guide
+1. Please Run this assignment by Intelli or any other software to run the java
+2. First, You need to set/edit the configuration to run FileServer.java
+3. Then, You need to set the configuration to run Main.java.
+4. Before You run this program, you need to change the the directory for Server and Client. Client directory is in Main. Server directory is FileServer.java
+5. Then, You run the FileServer.java first to activate the Server.
+6. Then, You run the Main.java that Client connects to Server by the given Portnumber.
+7. Then Test Upload and Download. Upload is only from Client to Server. Download is only from Server to Client.
+
+**THERE IS DOCUMENT FILE THAT EXPLAINES ABOUT THE IMPROVMENT OF THE ASSIGNMENT2 FILE SHARING**
