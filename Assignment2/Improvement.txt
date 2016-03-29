@@ -1,0 +1,13 @@
+IMPROVEMENT ON ASSIGNMENT 2 FILE SHARING.
+
+HYO KIM and ﻿Mohammed Savari
+
+There are a few ways of improving this particular file sharing application. 
+Instead of hard-coding the client’s folder, 
+it would be better if, after running the application, 
+the app has a directoryChooser that asks which directory the client would like to use. 
+That way it is not only focused on one directory. 
+Having subfolders would be a good idea as well since it will help optimize the content organization. 
+Instead of using BufferedReader and PrintWriter to move files around, 
+we could copy the file bytes to move any file type instead of just .txt or .java etc. 
+The UI could be more user friendly if we were able to implement a preview method to show what the contents of the file is before uploading/downloading.  
