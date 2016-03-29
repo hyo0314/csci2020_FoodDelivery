@@ -122,6 +122,7 @@ public class FileServer {
                 while ((contents = fileRead.readLine()) != null) {
                     bw.write(contents);
                     bw.newLine();
+                    bw.flush();
                 }
 
                 System.out.println(filename + " successfully uploaded!");
