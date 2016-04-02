@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="commons-beanutils-1.8.3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../csci-mid/Lab04Solution/lib/commons-beanutils-1.8.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../csci-mid/Lab04Solution/lib/commons-collections-3.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../csci-mid/Lab04Solution/lib/commons-digester-1.8.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../csci-mid/Lab04Solution/lib/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../csci-mid/Lab04Solution/lib/commons-validator-1.4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

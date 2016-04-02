@@ -48,6 +48,13 @@ public class Main extends Application {
 
                 nameField.setText("");
                 System.out.println(restaurantName);
+                primaryStage.hide();
+
+                BorderPane layout2 =new BorderPane();
+                Stage nextStage = new Stage();
+                nextStage.setTitle("ByeWorld");
+                nextStage.setScene(new Scene(layout2,500,500));
+                nextStage.show();
             }
         });
         textArea.add(addButton, 25, 8);
