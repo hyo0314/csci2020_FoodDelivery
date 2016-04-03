@@ -1,21 +1,30 @@
 package sample;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+import com.sun.xml.internal.ws.api.message.Message;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.apache.commons.validator.routines.EmailValidator;
+import sun.plugin2.message.transport.Transport;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 
 public class Main extends Application {
+
+    //login page variables
     private BorderPane loginLayout;
     private TextField typeID, typePassword;
     private Label typeIDError,typePasswordError;
@@ -25,10 +34,30 @@ public class Main extends Application {
     private TextField userIDField, passwordField, firstNameField,lastNameField, emailField, phoneField, addressField;
     private Label userIdErrorLabel, passwordErrorLabel, firstNameErrorLabel,lastNameErrorLabel, emailErrorLabel, phoneErrorLabel, addressErrorLabel;
     private FileWriter dataSave;
+    private Stage signUpStage;
+
+    //forgot USERID STAGE variable
+    private Stage forgotID;
+    private BorderPane forgotIDLayout;
+    private TextField typeEmailField;
+
+    //forgot Password Stage variable
+    private Stage forgotPW;
+    private BorderPane forgotPWLayout;
+    private TextField typedIDField;
 
     @Override
     public void start(Stage loginPage) throws Exception{
+        //sign up stage
+        signUpStage = new Stage();
 
+        //forgot userid stage
+        forgotID = new Stage();
+
+        //forgot pw stage
+        forgotPW = new Stage();
+
+        //login area
         GridPane loginArea = new GridPane();
         loginArea.setPadding(new Insets(10,10,10,10));
         loginArea.setVgap(10);
@@ -36,6 +65,7 @@ public class Main extends Application {
 
         //userID section with error label message
         Label typeUserIDLabel = new Label("User ID:");
+        typeUserIDLabel.setStyle("-fx-text-fill: #FFFFFF");
         loginArea.add(typeUserIDLabel, 0, 0);
         typeID = new TextField();
         typeID.setPromptText("Enter the ID");
@@ -45,6 +75,7 @@ public class Main extends Application {
 
         //password section with error label message
         Label typePasswordLabel = new Label("Password:");
+        typePasswordLabel.setStyle("-fx-text-fill: #FFFFFF");
         loginArea.add(typePasswordLabel, 0, 1);
         typePassword = new PasswordField();
         typePassword.setPromptText("Enter the Password");
@@ -52,6 +83,7 @@ public class Main extends Application {
         typePasswordError = new Label("");
         loginArea.add(typePasswordError, 2, 1);
 
+        //After you put the ID and password, the button do the action such as checking id and pw.
         Button loginButton = new Button("Login");
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -60,6 +92,7 @@ public class Main extends Application {
                 String userPw = typePassword.getText();
                 try
                 {
+                    //if the id and pw meet out database, the go to Searching page, if not, type again.
                     boolean checkLoginInfo = loginValidate(userId,userPw);
                     if(!checkLoginInfo)
                     {
@@ -100,13 +133,14 @@ public class Main extends Application {
 
         loginArea.add(loginButton,0,2);
 
+        //sign up button is to go to the sign up page.
         Button signUpButton = new Button("Sign Up");
         signUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                     loginPage.hide();
 
-                    Stage signUpStage = new Stage();
+
                     //Two Buttons 1. Sign up Button 2. Reset Button
                     //when Sihn up button clicks, the information about the user will be saved and the when the reset button clicks,
                     //fields will be empty.
@@ -123,6 +157,7 @@ public class Main extends Application {
                     userIDField.setPromptText("User ID");
                     signUpArea.add(userIDField, 1, 0);
                     userIdErrorLabel = new Label("");
+                    userIdErrorLabel.setStyle("-fx-text-fill: #FF0000");
                     signUpArea.add(userIdErrorLabel,2,0);
 
                     //password section with error label message
@@ -132,6 +167,7 @@ public class Main extends Application {
                     passwordField.setPromptText("Password");
                     signUpArea.add(passwordField, 1, 1);
                     passwordErrorLabel = new Label("");
+                    passwordErrorLabel.setStyle("-fx-text-fill: #FF0000");
                     signUpArea.add(passwordErrorLabel, 2, 1);
 
                     //firstname section with error label message
@@ -141,6 +177,7 @@ public class Main extends Application {
                     firstNameField.setPromptText("First Name");
                     signUpArea.add(firstNameField, 1, 2);
                     firstNameErrorLabel = new Label("");
+                    firstNameErrorLabel.setStyle("-fx-text-fill: #FF0000");
                     signUpArea.add(firstNameErrorLabel, 2, 2);
 
                     //last name section with error label message
@@ -150,6 +187,7 @@ public class Main extends Application {
                     lastNameField.setPromptText("Last Name");
                     signUpArea.add(lastNameField,1,3);
                     lastNameErrorLabel = new Label("");
+                    lastNameErrorLabel.setStyle("-fx-text-fill: #FF0000");
                     signUpArea.add(lastNameErrorLabel,2,3);
 
                     //email section with error label message
@@ -159,6 +197,7 @@ public class Main extends Application {
                     emailField.setPromptText("E-Mail");
                     signUpArea.add(emailField, 1, 4);
                     emailErrorLabel = new Label("");
+                    emailErrorLabel.setStyle("-fx-text-fill: #FF0000");
                     signUpArea.add(emailErrorLabel, 2, 4);
 
                     //phone section with error label message
@@ -168,6 +207,7 @@ public class Main extends Application {
                     phoneField.setPromptText("Phone #");
                     signUpArea.add(phoneField, 1, 5);
                     phoneErrorLabel = new Label("");
+                    phoneErrorLabel.setStyle("-fx-text-fill: #FF0000");
                     signUpArea.add(phoneErrorLabel, 2, 5);
 
                     //addresss section with error label message
@@ -177,6 +217,7 @@ public class Main extends Application {
                     signUpArea.add(addressField,1,6);
                     addressField.setPromptText("Address");
                     addressErrorLabel = new Label("");
+                    addressErrorLabel.setStyle("-fx-text-fill: #FF0000");
                     signUpArea.add(addressErrorLabel,2,6);
 
                     //sign up button, when all inputs are correct, then the user information will be saved to the csv file with all inputs
@@ -196,7 +237,9 @@ public class Main extends Application {
 
                             //error count, if there is error in each field
                             int errorCount = 0;
-                            int userIdErrorcount = 0;
+                            int userIDRepeatError = 0;
+                            int userEmailRepeatError = 0;
+
 
                             try
                             {
@@ -209,7 +252,12 @@ public class Main extends Application {
 
                                     if(col[0].equals(userID))
                                     {
-                                        userIdErrorcount = 1;
+                                        userIDRepeatError = 1;
+                                    }
+
+                                    if(col[4].equals(email))
+                                    {
+                                        userEmailRepeatError = 1;
                                     }
                                 }
 
@@ -224,9 +272,8 @@ public class Main extends Application {
 
                                 //if the user Id is same as the database(csv file), then gives the error message
                                 //if the user puts nothing on the the Id section, then gives the error message
-                                if(userIdErrorcount == 1 || userID.equals(""))
+                                if(userIDRepeatError == 1 || userID.equals(""))
                                 {
-                                    System.out.println(userIdErrorcount);
                                     userIdErrorLabel.setText("ID already Exists or Please Enter ID");
                                     errorCount++;
                                 }
@@ -252,8 +299,8 @@ public class Main extends Application {
                                     passwordErrorLabel.setText("");
 
                                 //if the email is wrong format, then gives the error message
-                                if (!validEmail) {
-                                    emailErrorLabel.setText("Invalid E-Mail Address");
+                                if (!validEmail || userEmailRepeatError == 1) {
+                                    emailErrorLabel.setText("Invalid E-Mail Address Or Email already Exists");
                                     errorCount++;
                                 } else {
                                     emailErrorLabel.setText("");
@@ -314,7 +361,7 @@ public class Main extends Application {
                                     alert.showAndWait();
 
                                     //after successful signup, then go to login page. hide the signupStage.
-                                    signUpStage.hide();
+                                    signUpStage.close();
                                     loginPage.show();
                                 }
                                 else
@@ -365,10 +412,9 @@ public class Main extends Application {
                     signUpArea.add(resetButton,1,7);
                     signUpLayout = new BorderPane();
                     signUpLayout.setCenter(signUpArea);
+                    signUpLayout.setStyle("-fx-background-color: #FFFFFF;");
 
-
-
-                    signUpStage.setTitle("Sign Up to Food Delivery");
+                    signUpStage.setTitle("Register to FoodDelivery");
                     signUpStage.setScene(new Scene(signUpLayout, 650,350));
                     signUpStage.show();
 
@@ -376,11 +422,186 @@ public class Main extends Application {
         });
         loginArea.add(signUpButton,1,2);
 
+        //forgotIDButton in the Login Page
+        //this forgotIDButton click, the forgotID page will pop up
+        Button forgotIDButton = new Button("Forgot ID?");
+        forgotIDButton.setPrefSize(100,30);
+        forgotIDButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                GridPane forgotIDArea = new GridPane();
+                forgotIDArea.setPadding(new Insets(10,10,10,10));
+                forgotIDArea.setVgap(10);
+                forgotIDArea.setHgap(10);
+
+                //label and textfield for seaching the ID by Registered email
+                Label typeEmailLabel = new Label("Type Email : ");
+                typeEmailLabel.setStyle("-fx-text-fill: #FFFFFF");
+                forgotIDArea.add(typeEmailLabel, 0,0);
+                typeEmailField = new TextField();
+                typeEmailField.setPromptText("Type your registered Email");
+                forgotIDArea.add(typeEmailField,1,0);
+
+                //the button ShowID is if the typed email is in our database, then send the pop up message with ID
+                Button showID = new Button("Show ID");
+                forgotIDArea.add(showID,2,0);
+                showID.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        String typedEmail = typeEmailField.getText();
+                        String matchedID = "";
+
+                        try {
+
+                            BufferedReader bf = new BufferedReader(new FileReader("Data/userInformation.csv"));
+                            String line;
+                            while ((line = bf.readLine()) != null) {
+                                String[] col = line.split(",");
+
+                                if (col[4].equals(typedEmail)) {
+                                    matchedID = col[0];
+                                }
+                            }
+
+
+                            if(matchedID.equals(""))
+                            {
+                                //if user typed email is not in the database,
+                                //pop up message to user with error message
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("The Email IS NOT in Our Data");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Please Type Email Again");
+
+                                alert.showAndWait();
+                                forgotID.close();
+
+                            }
+                            else {
+                                //if the user typed emaile is in the databse,
+                                //pop up message to user with their ID.
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("WE FIND YOUR ID");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Your ID is " + matchedID);
+
+                                alert.showAndWait();
+                                forgotID.close();
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+                forgotIDLayout = new BorderPane();
+                forgotIDLayout.setCenter(forgotIDArea);
+                forgotIDLayout.setStyle("-fx-background-color: #000000;");
+
+                forgotID.setTitle("Find Your ID");
+                forgotID.setScene(new Scene(forgotIDLayout, 500,60));
+                forgotID.show();
+            }
+        });
+        loginArea.add(forgotIDButton,0,3);
+
+        Button forgotPWButton = new Button("Forgot Password?");
+        loginArea.add(forgotPWButton,1,3);
+        forgotPWButton.setPrefSize(150,30);
+        forgotPWButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                GridPane forgotPWArea = new GridPane();
+                forgotPWArea.setPadding(new Insets(10,10,10,10));
+                forgotPWArea.setVgap(10);
+                forgotPWArea.setHgap(10);
+
+                //label and textfield for seaching the password by Registered ID
+                Label typedUserID = new Label("Type Your USER ID : ");
+                typedUserID.setStyle("-fx-text-fill: #FFFFFF");
+                forgotPWArea.add(typedUserID,0,0);
+                typedIDField = new TextField();
+                typedIDField.setText("");
+                typedIDField.setPromptText("Type your registered ID");
+                forgotPWArea.add(typedIDField,1,0);
+
+                //the button showPW is if the typed id is in our database, then send the pop up message with ID and password
+                Button showPW = new Button("Show Password!");
+                forgotPWArea.add(showPW,2,0);
+                showPW.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        String typedUserID = typedIDField.getText();
+                        String matchedPW = "";
+
+                        try {
+
+                            BufferedReader bf = new BufferedReader(new FileReader("Data/userInformation.csv"));
+                            String line;
+                            while ((line = bf.readLine()) != null) {
+                                String[] col = line.split(",");
+
+                                if (col[0].equals(typedUserID)) {
+                                    matchedPW = col[1];
+                                }
+                            }
+
+
+                            if(matchedPW.equals(""))
+                            {
+                                //if user typed ID is not in the database,
+                                //pop up message to user with error message
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("The ID IS NOT in our Database");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Please Type ID Again.");
+
+                                alert.showAndWait();
+                                forgotPW.close();
+
+                            }
+                            else {
+                                //if the user typed ID is in the databse,
+                                //pop up message to user with their ID.
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("WE FIND YOUR PW");
+                                alert.setHeaderText(null);
+                                alert.setContentText("Your ID is " + typedUserID + " and the password is "  + matchedPW);
+
+                                alert.showAndWait();
+                                forgotPW.close();
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+                forgotPWLayout = new BorderPane();
+                forgotPWLayout.setCenter(forgotPWArea);
+                forgotPWLayout.setStyle("-fx-background-color: #000000;");
+
+                forgotPW.setTitle("Find Your Password");
+                forgotPW.setScene(new Scene(forgotPWLayout, 500,60));
+                forgotPW.show();
+
+            }
+        });
+
         loginLayout = new BorderPane();
         loginLayout.setCenter(loginArea);
+        loginLayout.setStyle("-fx-background-color: #000000;");
 
-        loginPage.setTitle("Welcome to Food Delivery");
-        loginPage.setScene(new Scene(loginLayout, 600,600));
+        loginPage.setTitle("Log into FoodDelivery");
+        loginPage.setScene(new Scene(loginLayout, 400,200));
+
         loginPage.show();
     }
 
