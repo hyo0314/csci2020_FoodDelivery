@@ -11,9 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 import org.apache.commons.validator.routines.EmailValidator;
 import sun.plugin2.message.transport.Transport;
 
@@ -410,9 +411,19 @@ public class Main extends Application {
                         }
                     });
                     signUpArea.add(resetButton,1,7);
+
                     signUpLayout = new BorderPane();
                     signUpLayout.setCenter(signUpArea);
-                    signUpLayout.setStyle("-fx-background-color: #FFFFFF;");
+                    signUpLayout.setPadding(new Insets(20));
+
+                    Image image = new Image ("http://i.imgur.com/YgxlKFw.jpg");
+                    signUpLayout.setBackground(new Background(new BackgroundImage(image,BackgroundRepeat.REPEAT,
+                        BackgroundRepeat.REPEAT,
+                        BackgroundPosition.DEFAULT,
+                        BackgroundSize.DEFAULT)));
+
+                    //signUpLayout.setStyle("-fx-background-image: url(\"/img/background.jpg\");-fx-background-size: 500, 500;-fx-background-repeat: no-repeat;");
+                    //signUpLayout.setStyle("-fx-background-color: #FFFFFF;");
 
                     signUpStage.setTitle("Register to FoodDelivery");
                     signUpStage.setScene(new Scene(signUpLayout, 650,350));
