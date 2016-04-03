@@ -142,7 +142,7 @@ public class Main extends Application {
 
 
                     //Two Buttons 1. Sign up Button 2. Reset Button
-                    //when Sihn up button clicks, the information about the user will be saved and the when the reset button clicks,
+                    //when sign up button clicks, the information about the user will be saved and the when the reset button clicks,
                     //fields will be empty.
 
                     GridPane signUpArea = new GridPane();

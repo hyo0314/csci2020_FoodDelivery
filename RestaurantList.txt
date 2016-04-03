@@ -1,0 +1,78 @@
+Restaurant List(for Project)
+
+
+1. Japanese Restaurant
+- Menu
+	- Salad & Soup
+		- Miso Soup ($1.00)
+		- Seafood Soup ($2.50)
+		- Green Salad ($1.00)
+		- Crab Meat Salad ($3.00)
+	- Appetizers
+		- Salmon Tar($6.00)
+		- Gyoza(6 piece) ($4.00)
+		- Yam Tempura (8 pieces) ($5.50)
+	- Noodle Dishes
+		- Seafood Udon Soup ($9.50)
+		- Chicken Udon Soup ($9.50)
+		- Vegetable Noodle ($8.00)
+		- Chicken Fried Noodle($8.00)
+	-Sushi
+		- Salmon Sushi (2 pieces) ($4.00)
+		- Saba Sushi (2 pieces) ($4.00)
+		- Tuna Sushi (2 pieces) ($4.50)
+	-Sashimi
+		- Salmon (5 pieces) ($8.00)
+		- Saba (5 pieces) ($8.00)
+		- Tuna (5 pieces) ($10.00)
+	-Maki
+		- Cucumber Roll ($4.50)
+		- Vegetable Roll ($4.50)
+		- California Roll ($4.50)
+		- Salmon Avocado Roll ($4.50)
+		- Rainbow Roll ($4.50)
+		
+- location
+- open hours (12:30pm -10pm)
+
+2. Canadian Burger Restaurant
+-Menu
+	-Burger
+		- Classic Burger (Certified angus beef seasoned and char-broiled) ($10.99)
+		- C.B House Burger (Classic burger topped with Canadian cheddar, applewood, smoked bacon, and a houe-made microbrew battered onion ring) ($12.99)
+		-BBQ Burger (Classic burger topped with shaved BBQ beef brisket, BBQ sauce and coleslaw) ($13.99)
+		-Mushroom Burger (Classic burger topped with roasted shiitake and button mushrooms, port-caramelized onions, bri and baamic glaze) ($12.99)
+		-Southwest Turkey Burger (Pan seared fresh ground turkey burger atop baby spinach stacked with brie cheese, avocado, sauteed peppers and onions on whole wheat bun) ($12.48(
+	-Beverages
+		-Coca-Cola ($2.59)
+		-Sprite ($2.59)
+		-Nestea Iced Tea ($2.59)
+
+-location
+-open hours (1pm-8pm)
+
+3. Italian Restuarant
+-Menu
+	-Pizzas
+		-Napolitana (Tomato sauce and cheese)
+			-11'' Small ($11.00)
+			-14'' Medium ($14.00)
+			-18'' X-Large ($18.00)
+		-Pizza Rustica (Gorgonzola cheese, mozzarella cheese, spicy sausage, rapini)
+			-11'' Small ($16.00)
+			-14'' Medium ($20.00)
+			-18'' X-Large ($26.00)
+	-Pasta
+		-Penne Mezza Notte (Penne, tiger shrimp mussels, clams, calamari, Alaskan king crab, white wine, light tomato sauce) ($54.00)
+		-Linguine Pescatore (Linguine with mussels, clams, tiger shrimp, calamari, white wine, tomato sauce) ($22.00)
+		-Rigatoni Russa (rigatoni, pancetta, vodka, rose sauce) ($16.00)
+		-Crespelle Napoletana (Homemade crepes, spinach & ricotta cheese, mozzarella cheese, tomato sauce) ($16.00)
+
+	-Beverages
+		-Coca-Cola ($2.59)
+		-Sprite ($2.59)
+		-Nestea Iced Tea ($2.59)
+
+			
+-location
+-open hours (11am-10pm)
