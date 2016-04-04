@@ -139,8 +139,6 @@ public class Main extends Application {
         signUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                    loginPage.hide();
-
 
                     //Two Buttons 1. Sign up Button 2. Reset Button
                     //when sign up button clicks, the information about the user will be saved and the when the reset button clicks,
@@ -363,7 +361,7 @@ public class Main extends Application {
 
                                     //after successful signup, then go to login page. hide the signupStage.
                                     signUpStage.close();
-                                    loginPage.show();
+                                    //loginPage.show();
                                 }
                                 else
                                 {
