@@ -26,6 +26,7 @@ import java.io.FileWriter;
 public class Main extends Application {
 
     //login page variables
+    private Stage loginPage;
     private BorderPane loginLayout;
     private TextField typeID, typePassword;
     private Label typeIDError,typePasswordError;
@@ -47,6 +48,8 @@ public class Main extends Application {
     private BorderPane forgotPWLayout;
     private TextField typedIDField;
 
+
+
     @Override
     public void start(Stage loginPage) throws Exception{
         //sign up stage
@@ -59,6 +62,7 @@ public class Main extends Application {
         forgotPW = new Stage();
 
         //login area
+        loginPage = new Stage;
         GridPane loginArea = new GridPane();
         loginArea.setPadding(new Insets(10,10,10,10));
         loginArea.setVgap(10);
@@ -609,7 +613,7 @@ public class Main extends Application {
         loginLayout.setStyle("-fx-background-color: #000000;");
 
         loginPage.setTitle("Log into FoodDelivery");
-        loginPage.setScene(new Scene(loginLayout, 400,200));
+        loginPage.setScene(new Scene(loginLayout, 600,200));
 
         loginPage.show();
     }

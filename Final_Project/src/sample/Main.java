@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -61,7 +62,7 @@ public class Main extends Application {
         forgotPW = new Stage();
 
         //login area
-        loginPage = new Stage;
+        loginPage = new Stage();
 
         //title page layout and title
         titleStage.setTitle("Food Delivery App");
@@ -165,6 +166,13 @@ public class Main extends Application {
 
                                 //after successful login, then the login page will hide and the searching Page will pop up
                                 loginPage.hide();
+
+                                try {
+                                    mainStage();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                mainStage.show();
                             }
                         }
                         catch(Exception e)
