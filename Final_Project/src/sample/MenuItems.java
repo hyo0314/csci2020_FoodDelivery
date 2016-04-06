@@ -2,9 +2,9 @@ package sample;
 
 public class MenuItems {
 
-    private  String foodName;
-    private  int amount;
-    private  double dollar;
+    private String foodName;
+    private int amount;
+    private double dollar;
 
 
     public MenuItems(String foodName, int  amount, double dollar) {

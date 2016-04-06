@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.beans.property.adapter.JavaBeanIntegerPropertyBuilder;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,24 +15,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Arrays;
-import java.util.List;
 
 public class Main extends Application {
-
-    //order summary page variable
-    TableView totalTable;
 
     //guestInfo page variable
     private BorderPane guestInfoLayout;
@@ -44,12 +36,14 @@ public class Main extends Application {
     private FileWriter guestDataSave;
     private Stage guestInfo;
 
-    private TableView table;
+    //table for restaurants
+    private TableView restaurantTable;
 
     private TextField total;
     private double totalDollars;
     private Stage orderStage;
 
+    //each Restaurant pages for Stage
     private Stage japMenuStage;
     private Stage canMenuStage;
 
@@ -101,6 +95,8 @@ public class Main extends Application {
 
         //login area
         loginPage = new Stage();
+
+        //we mad these two varaible as global/private because we need to get certain current user ID information based on login user id
         loginId ="";
         loginPw ="";
 
@@ -114,9 +110,12 @@ public class Main extends Application {
         textArea.setVgap(10);
         textArea.setHgap(10);
 
-        Label nameLabel = new Label("Welcome to FoodDelivery!");
-        nameLabel.setStyle("-fx-font-size: 15pt");
-        textArea.add(nameLabel, 22, 5);
+        //title label
+        Label nameLabel = new Label("Welcome to \nFOOD DELIVERY!!");
+        nameLabel.setTextFill(Color.DARKBLUE);
+        nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC, 40));
+        nameLabel.setMinSize(10,10);
+        textArea.add(nameLabel, 26, 24);
 
         //continue as guest button, if the user doesn't have the user id and password
         Button skip = new Button("Continue as guest");
@@ -136,7 +135,7 @@ public class Main extends Application {
                 mainStage.show();
             }
         });
-        textArea.add(skip, 23, 8);
+        textArea.add(skip, 26, 25);
 
         //this button will go to login page.
         Button addButton = new Button("Login!");
@@ -207,7 +206,7 @@ public class Main extends Application {
                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                 alert.setTitle("Congratulation");
                                 alert.setHeaderText(null);
-                                alert.setContentText("Now, You have successfully log into the FoodDelivery");
+                                alert.setContentText("Login successful!");
 
                                 alert.showAndWait();
 
@@ -371,7 +370,7 @@ public class Main extends Application {
                                     //if the user puts nothing on the the Id section, then gives the error message
                                     if(userIDRepeatError == 1 || userID.equals(""))
                                     {
-                                        userIdErrorLabel.setText("ID already Exists or Please Enter ID");
+                                        userIdErrorLabel.setText("Invalid userID, please input userID again.");
                                         errorCount++;
                                     }
                                     else
@@ -381,7 +380,7 @@ public class Main extends Application {
                                     if(address.equals(""))
                                     {
                                         errorCount++;
-                                        addressErrorLabel.setText("Please Enter the address");
+                                        addressErrorLabel.setText("Please enter the email address.");
                                     }
                                     else
                                         addressErrorLabel.setText("");
@@ -389,7 +388,7 @@ public class Main extends Application {
                                     //if the user puts nothing on the password section, then gives error message
                                     if(password.equals(""))
                                     {
-                                        passwordErrorLabel.setText("Please enter password");
+                                        passwordErrorLabel.setText("Please enter a password");
                                         errorCount++;
                                     }
                                     else
@@ -451,9 +450,9 @@ public class Main extends Application {
 
                                         //pop up message to user for the congratualtion.
                                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                        alert.setTitle("Congratulation");
+                                        alert.setTitle("Congratulations");
                                         alert.setHeaderText(null);
-                                        alert.setContentText("Now, You have joined to FoodDelivery");
+                                        alert.setContentText("Registration complete!");
 
                                         alert.showAndWait();
 
@@ -477,14 +476,11 @@ public class Main extends Application {
                                 {
                                     e.printStackTrace();
                                 }
-
-
-
-
                             }
                         });
                         signUpArea.add(registerButton,0,7);
 
+                        //reseting button to reset everything in the feild
                         Button resetButton = new Button("Reset");
                         resetButton.setPrefSize(100,60);
                         resetButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -512,14 +508,12 @@ public class Main extends Application {
                         signUpLayout.setCenter(signUpArea);
                         signUpLayout.setPadding(new Insets(20));
 
+                        //sign up background will be the background from the upload image by us
                         Image image = new Image ("http://i.imgur.com/YgxlKFw.jpg");
                         signUpLayout.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT,
                                 BackgroundRepeat.REPEAT,
                                 BackgroundPosition.DEFAULT,
                                 BackgroundSize.DEFAULT)));
-
-                        //signUpLayout.setStyle("-fx-background-image: url(\"/img/background.jpg\");-fx-background-size: 500, 500;-fx-background-repeat: no-repeat;");
-                        //signUpLayout.setStyle("-fx-background-color: #FFFFFF;");
 
                         signUpStage.setTitle("Register to FoodDelivery");
                         signUpStage.setScene(new Scene(signUpLayout, 650,350));
@@ -546,7 +540,7 @@ public class Main extends Application {
                         typeEmailLabel.setStyle("-fx-text-fill: #FFFFFF");
                         forgotIDArea.add(typeEmailLabel, 0,0);
                         typeEmailField = new TextField();
-                        typeEmailField.setPromptText("Type your registered Email");
+                        typeEmailField.setPromptText("Type in your registered Email");
                         forgotIDArea.add(typeEmailField,1,0);
 
                         //the button ShowID is if the typed email is in our database, then send the pop up message with ID
@@ -560,6 +554,7 @@ public class Main extends Application {
 
                                 try {
 
+                                    //read file from the userInformation.csv
                                     BufferedReader bf = new BufferedReader(new FileReader("Data/userInformation.csv"));
                                     String line;
                                     while ((line = bf.readLine()) != null) {
@@ -582,7 +577,6 @@ public class Main extends Application {
 
                                         alert.showAndWait();
                                         forgotID.close();
-
                                     }
                                     else {
                                         //if the user typed emaile is in the databse,
@@ -615,6 +609,7 @@ public class Main extends Application {
                 });
                 loginArea.add(forgotIDButton,0,3);
 
+                //forgot password button is to find the password that matches user ID
                 Button forgotPWButton = new Button("Forgot Password?");
                 loginArea.add(forgotPWButton,1,3);
                 forgotPWButton.setPrefSize(150,30);
@@ -675,7 +670,7 @@ public class Main extends Application {
                                         //if the user typed ID is in the databse,
                                         //pop up message to user with their ID.
                                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                        alert.setTitle("WE FIND YOUR PW");
+                                        alert.setTitle("PW RETRIEVED!");
                                         alert.setHeaderText(null);
                                         alert.setContentText("Your ID is " + typedUserID + " and the password is "  + matchedPW);
 
@@ -712,21 +707,22 @@ public class Main extends Application {
                 loginPage.show();
             }
         });
-        textArea.add(addButton, 22, 8);
+        textArea.add(addButton, 26, 26);
 
-        GridPane imageArea = new GridPane();
-        ImageView image = new ImageView(new Image(Main.class.getResourceAsStream("background-food.jpg")));
-        image.setFitWidth(750);
-        image.setFitHeight(300);
-        imageArea.add(image, 0, 0, 1, 2);
+        //we set the background image for the title page
+        Image image = new Image("http://www.twitpaper.com/wp-content/uploads/sites/8/2014/01/dreamstime_xs_32402600.jpg");
+        titleLayout.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT,
+                BackgroundRepeat.REPEAT,
+                BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT)));
 
-
-        titleLayout.setTop(imageArea);
         titleLayout.setCenter(textArea);
         Scene scene = new Scene(titleLayout, 750, 700);
         titleStage.setScene(scene);
         titleStage.show();
     }
+
+    //mainStage is the stage where the user choose "desired" restaurant
     public void mainStage() throws Exception{
 
         mainLayout = new BorderPane();
@@ -738,8 +734,11 @@ public class Main extends Application {
         fill.setHgap(10);
 
         Label restaurant = new Label("Select desired restaurant");
-        fill.add(restaurant, 10, 10);
+        restaurant.setTextFill(Color.WHITE);
+        restaurant.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC, 19));
+        fill.add(restaurant, 15, 14);
 
+        //combo box list for restuarant
         ObservableList<String> options =
                 FXCollections.observableArrayList(
                         "Japanese Restaurant",
@@ -748,18 +747,21 @@ public class Main extends Application {
         final ComboBox<String> restaurantChoice = new ComboBox<String>(options);
 
         restaurantChoice.setValue("Select one");
-        fill.add(restaurantChoice, 10, 11);
+        fill.add(restaurantChoice, 15, 15);
 
+        //serach button is to move user to the "selected restaurant page"
         Button searchBTN = new Button("Search!");
         searchBTN.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 //search for restaurant name
-                mainStage.hide();
 
                 String selected = restaurantChoice.getValue();
 
+                //move to japanese restaruant page
                 if(selected.equals("Japanese Restaurant")){
+                    mainStage.hide();
+
                     try {
                         japMenuStage();
                     } catch (Exception e) {
@@ -768,6 +770,10 @@ public class Main extends Application {
                     japMenuStage.show();
                 }
                 else if(selected.equals("Canadian Burger Restaurant")){
+                    //move to canadian burger page
+
+                    mainStage.hide();
+
                     try {
                         canMenuStage();
                     } catch (Exception e) {
@@ -775,10 +781,25 @@ public class Main extends Application {
                     }
                     canMenuStage.show();
                 }
+                else{
+
+                    //this alert pops up when the user didn't choose anything
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("ERROR");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please select a restaurant!");
+                    alert.showAndWait();
+                }
             }
         });
-        fill.add(searchBTN, 10,12);
+        fill.add(searchBTN, 15, 16);
 
+        //this choosing stage background
+        Image image = new Image("http://webdesignerdrops.com/wp-content/uploads/2012/08/20_Diamond-Grunge-Backgrounds-500x500.jpg");
+        mainLayout.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT,
+                BackgroundRepeat.REPEAT,
+                BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT)));
 
         mainLayout.setCenter(fill);
         mainStage.setTitle("Main menu");
@@ -790,7 +811,8 @@ public class Main extends Application {
         japMenuStage = new Stage();
         menuLayout = new BorderPane();
 
-        table = new TableView();
+        //table for the japanese restaurant will have food name, amount of foods, and total cost for each food
+        restaurantTable = new TableView();
 
         TableColumn<MenuItems, String> foodName = new TableColumn<>("Order");
         foodName.setMinWidth(50);
@@ -804,9 +826,8 @@ public class Main extends Application {
         dollar.setMinWidth(50);
         dollar.setCellValueFactory(new PropertyValueFactory<>("dollar"));
 
-        table.getColumns().add(foodName);
-        table.getColumns().add(amount);
-        table.getColumns().add(dollar);
+        restaurantTable.getColumns().add(amount);
+        restaurantTable.getColumns().add(dollar);
 
         GridPane menu = new GridPane();
         menu.setPadding(new Insets(10,10,10,10));
@@ -814,8 +835,10 @@ public class Main extends Application {
         menu.setHgap(10);
 
         Label menuLabel = new Label("Menu");
-        menu.add(menuLabel,0,2);
+        menuLabel.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC, 40));
+        menu.add(menuLabel,1,2);
 
+        //combo box for soups and salads
         ObservableList<String> soupOptions =
                 FXCollections.observableArrayList(
                         "Miso Soup ($1.00)",
@@ -831,17 +854,21 @@ public class Main extends Application {
                 "Crab Meat Salad ($3.00)"
         };
 
+        //each combo box will have their own array to count the food number and cost
         soupChoice.setValue("Soups and Salads");
         menu.add(soupChoice, 1, 4);
         int[] soupCount = new int[4];
         double[] soupDollar = new double[4];
 
+        //add(+) button is to increase the amount of food that user chooses from the combo box.
+        //the other add button works same as this one
         Button addSoup = new Button("+");
         addSoup.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 String choice = soupChoice.getValue();
 
+                //if user choose any food in combo box, it will count amount of foods and total cost of food
                 if(choice.equals(soupArray[0])) {
                     soupCount[0]++;
                     soupDollar[0]+=1;
@@ -862,15 +889,13 @@ public class Main extends Application {
                     soupDollar[3]+=3;
                     totalDollars+=3;
                 }
-                for(int i = 0; i < soupCount.length; i++) {
-                    System.out.println(soupArray[i] + " " + soupCount[i] + " $" + soupDollar[i]);
-                }
-                System.out.println("Total : $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(addSoup, 2, 4);
 
+        //this remSoup (-) is to remove seletec food by one by one.
+        //this button only works when the amount of food is bigger than zero.
+        //the other remove button works same as this one
         Button remSoup = new Button("-");
         remSoup.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -897,15 +922,11 @@ public class Main extends Application {
                     soupDollar[3]-=3;
                     totalDollars-=3;
                 }
-
-                for(int i = 0; i < soupCount.length; i++)
-                    System.out.println(soupArray[i] + " " + soupCount[i] + " $" + soupDollar[i]);
-                System.out.println("Total : $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(remSoup, 3, 4);
 
+        //combo box for the Appetizers
         ObservableList<String> appOptions =
                 FXCollections.observableArrayList(
                         "Salmon Tar ($6.00)",
@@ -924,6 +945,7 @@ public class Main extends Application {
         int[] appCount = new int[3];
         double[] appDollar = new double[3];
 
+        //adding button is to add amount of food and total cost of that food
         Button addApp = new Button("+");
         addApp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -945,15 +967,11 @@ public class Main extends Application {
                     appDollar[2]+=5.5;
                     totalDollars+=5.5;
                 }
-
-                for(int i = 0; i < appCount.length; i++)
-                    System.out.println(appArray[i] + ": " + appCount[i] + " $" + appDollar[i]);
-                System.out.println("Total : $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(addApp, 2, 6);
 
+        //remove button
         Button remApp = new Button("-");
         remApp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -975,11 +993,6 @@ public class Main extends Application {
                     appDollar[2]-=5.5;
                     totalDollars-=5.5;
                 }
-
-                for(int i = 0; i < appCount.length; i++)
-                    System.out.println(appArray[i] + " " + appCount[i] + " $" + appDollar[i]);
-                System.out.println("Total : $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(remApp, 3, 6);
@@ -1023,11 +1036,6 @@ public class Main extends Application {
                     sushiDollar[2]+=4.5;
                     totalDollars+=4.5;
                 }
-
-                for(int i = 0; i < sushiCount.length; i++)
-                    System.out.println(sushiArray[i] + " " + sushiCount[i] + " $" + sushiDollar[i]);
-                System.out.println("Total : $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(addSushi, 2, 8);
@@ -1053,11 +1061,6 @@ public class Main extends Application {
                     sushiDollar[2]-=4.5;
                     totalDollars-=4.5;
                 }
-
-                for(int i = 0; i < sushiCount.length; i++)
-                    System.out.println(sushiArray[i] + " " + sushiCount[i] + " $" + sushiDollar[i]);
-                System.out.println("Total: $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(remSushi, 3, 8);
@@ -1115,10 +1118,6 @@ public class Main extends Application {
                     makiDollar[4]+=4.5;
                     totalDollars+=4.5;
                 }
-                for(int i = 0; i < makiCount.length; i++)
-                    System.out.println(makiArray[i] + " " + makiCount[i] + " $" + makiDollar[i]);
-                System.out.println("Total: $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(addMaki, 2, 10);
@@ -1154,84 +1153,88 @@ public class Main extends Application {
                     makiDollar[4]-=4.5;
                     totalDollars-=4.5;
                 }
-
-                for(int i = 0; i < makiCount.length; i++)
-                    System.out.println(makiArray[i] + " " + makiCount[i] + " $" + makiDollar[i]);
-                System.out.println("Total: $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(remMaki, 3, 10);
 
+        //update button is to show what the user has been ordered so far.
+        //update button will show the result or updating the amount of food, name of food and total cost of each food in Table
         Button update = new Button("Update order");
         update.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
-                table.getItems().clear();
-
+                restaurantTable.getItems().clear();
                 for(int i = 0; i < soupCount.length; i++) {
                     if(soupCount[i] != 0)
-                        table.getItems().add(new MenuItems(soupArray[i], soupCount[i], soupDollar[i]));
+                        restaurantTable.getItems().add(new MenuItems(soupArray[i], soupCount[i], soupDollar[i]));
                 }
                 for(int i = 0; i < appCount.length; i++) {
                     if (appCount[i] != 0)
-                        table.getItems().add(new MenuItems(appArray[i], appCount[i], appDollar[i]));
+                        restaurantTable.getItems().add(new MenuItems(appArray[i], appCount[i], appDollar[i]));
                 }
                 for(int i = 0; i < sushiCount.length; i++) {
                     if (sushiCount[i] != 0)
-                        table.getItems().add(new MenuItems(sushiArray[i], sushiCount[i], sushiDollar[i]));
+                        restaurantTable.getItems().add(new MenuItems(sushiArray[i], sushiCount[i], sushiDollar[i]));
                 }
                 for(int i = 0; i < makiCount.length; i++) {
                     if (makiCount[i] != 0)
-                        table.getItems().add(new MenuItems(makiArray[i], makiCount[i], makiDollar[i]));
+                        restaurantTable.getItems().add(new MenuItems(makiArray[i], makiCount[i], makiDollar[i]));
                 }
                 total = new TextField();
                 total.setText(Double.toString(totalDollars));
-
-                menu.add(total, 12, 12);
+                Label amount = new Label("Total dollars: ");
+                menu.add(amount, 17, 4);
+                total.setPrefWidth(15);
+                menu.add(total, 18, 4);
             }
         });
-        menu.add(update, 5, 15);
+        update.setPrefSize(100, 50);
+        menu.add(update, 17, 2);
 
+        //Order button only works when the user has been ordered somthing. If the user didn't order anything, then order button
+        //will pop up message.
+        //update button in Canadian restarant works same as this one.
         Button order = new Button("Order now!");
         order.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(totalDollars == 0)
+                if(restaurantTable.getItems().isEmpty())
                 {
-                    //pop up message to user that user has to order somthing in order to go to ORDER page.
+                    //pop up message to user that user has to order something in order to go to ORDER page.
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("ERROR");
                     alert.setHeaderText(null);
-                    alert.setContentText("You don't order anything");
+                    alert.setContentText("Your cart is empty!");
                     alert.showAndWait();
                 }
                 else {
+                    //if the user ordered something and updated the value to the table, then system will decide user is guest or login user
                     japMenuStage.hide();
                     boolean guestOrUser = decideUserType();
                     if(!guestOrUser)
                     {
                         guestInfo();
                         guestInfo.show();
-
                     }
                     else {
                         orderMenu();
-
                         orderStage.show();
                     }
                 }
-
             }
         });
-        menu.add(order, 16, 12);
+        order.setPrefSize(100, 50);
+        menu.add(order, 18, 2);
 
-        Label hours = new Label("Hours\n\tMonday - Friday: 12:30pm to 10:00pm\n\tSaturday: 12:30pm to 11:00pm\n\tSunday: CLOSED");
-        menu.add(hours, 0, 12);
+        //showing the hours of restaurant
+        Label hours = new Label("Hours\n\tMonday - Friday: 12:30pm to 10:00pm\n\t" +
+                "Saturday: 12:30pm to 11:00pm\n\tSunday: CLOSED");
+        menu.add(hours, 1, 12);
 
+        //showing the location by image
         Label location = new Label("Location");
-        menu.add(location, 0, 14);
+        menu.add(location, 1, 14);
 
         GridPane imageArea = new GridPane();
         ImageView image = new ImageView(new Image(Main.class.getResourceAsStream("JAPANESE.PNG")));
@@ -1239,18 +1242,27 @@ public class Main extends Application {
         image.setFitHeight(200);
         imageArea.add(image, 1, 1, 50, 50);
 
-        menuLayout.setCenter(imageArea);
+        //restaurant page background
+        Image back = new Image("http://www.justbringthechocolate.com/wp-content/uploads/2011/01/Background-500x230@2x.png");
+        menuLayout.setBackground(new Background(new BackgroundImage(back, BackgroundRepeat.REPEAT,
+                BackgroundRepeat.REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT)));
+
         menuLayout.setTop(menu);
-        menuLayout.setRight(table);
+        menuLayout.setCenter(imageArea);
+        menuLayout.setRight(restaurantTable);
         japMenuStage.setTitle("Japanese restaurant Menu");
-        japMenuStage.setScene(new Scene(menuLayout, 800, 700));}
+        japMenuStage.setScene(new Scene(menuLayout, 800, 700));
+    }
 
     public void canMenuStage() throws Exception{
 
+        //Canada Page works same way as Japanese Restaurant
         canMenuStage = new Stage();
         menuLayout = new BorderPane();
 
-        table = new TableView();
+        restaurantTable = new TableView();
 
         TableColumn<MenuItems, String> foodName = new TableColumn<>("Order");
         foodName.setMinWidth(50);
@@ -1264,9 +1276,9 @@ public class Main extends Application {
         dollar.setMinWidth(50);
         dollar.setCellValueFactory(new PropertyValueFactory<>("dollar"));
 
-        table.getColumns().add(foodName);
-        table.getColumns().add(amount);
-        table.getColumns().add(dollar);
+        restaurantTable.getColumns().add(foodName);
+        restaurantTable.getColumns().add(amount);
+        restaurantTable.getColumns().add(dollar);
 
         GridPane menu = new GridPane();
         menu.setPadding(new Insets(10,10,10,10));
@@ -1274,7 +1286,8 @@ public class Main extends Application {
         menu.setHgap(10);
 
         Label menuLabel = new Label("Menu");
-        menu.add(menuLabel,0,2);
+        menuLabel.setFont(Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC, 40));
+        menu.add(menuLabel,1,2);
 
         ObservableList<String> burgerOptions =
                 FXCollections.observableArrayList(
@@ -1326,13 +1339,9 @@ public class Main extends Application {
                 }
                 else if(choice.equals(burgerArray[4])) {
                     burgerCount[4]++;
-                    burgerDollar[4]+=12.50;
-                    totalDollars+=12.50;
+                    burgerDollar[4] += 12.50;
+                    totalDollars += 12.50;
                 }
-                for(int i = 0; i < burgerCount.length; i++)
-                    System.out.println(burgerArray[i] + " " + burgerCount[i] + " $" + burgerDollar[i]);
-                System.out.println("Total: $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(addBurger, 2, 4);
@@ -1370,12 +1379,6 @@ public class Main extends Application {
                     burgerDollar[4]-=12.50;
                     totalDollars-=12.50;
                 }
-
-
-                for(int i = 0; i < burgerCount.length; i++)
-                    System.out.println(burgerArray[i] + " " + burgerCount[i] + " $" + burgerDollar[i]);
-                System.out.println("Total: $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(remBurger, 3, 4);
@@ -1419,11 +1422,6 @@ public class Main extends Application {
                     bevDollar[2]+=2.50;
                     totalDollars+=2.50;
                 }
-
-                for(int i = 0; i < bevCount.length; i++)
-                    System.out.println(bevArray[i] + " " + bevCount[i] + " $" + bevDollar[i]);
-                System.out.println("Total: $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(addBev, 2, 6);
@@ -1451,51 +1449,50 @@ public class Main extends Application {
                     bevDollar[2]-=2.50;
                     totalDollars-=2.50;
                 }
-
-                for(int i = 0; i < bevCount.length; i++)
-                    System.out.println(bevArray[i] + " " + bevCount[i] + " $" + bevDollar[i]);
-                System.out.println("Total: $" + totalDollars);
-                System.out.println();
             }
         });
         menu.add(remBev, 3, 6);
 
         Label hours = new Label("Hours\n\tMonday - Friday: 11:30am to 10:00pm\n\tSaturday: 12:30pm to 11:00pm\n\tSunday: 12:30pm to 8:00pm");
-        menu.add(hours, 0, 12);
+        menu.add(hours, 1, 12);
 
         Label location = new Label("Location");
-        menu.add(location, 0, 14);
+        menu.add(location, 1, 14);
 
         Button update = new Button("Update order");
         update.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
-                table.getItems().clear();
+                restaurantTable.getItems().clear();
 
                 for(int i = 0; i < burgerCount.length; i++) {
                     if(burgerCount[i] != 0)
-                        table.getItems().add(new MenuItems(burgerArray[i], burgerCount[i], burgerDollar[i]));
+                        restaurantTable.getItems().add(new MenuItems(burgerArray[i], burgerCount[i], burgerDollar[i]));
                 }
                 for(int i = 0; i < bevCount.length; i++) {
                     if (bevCount[i] != 0)
-                        table.getItems().add(new MenuItems(bevArray[i], bevCount[i], bevDollar[i]));
+                        restaurantTable.getItems().add(new MenuItems(bevArray[i], bevCount[i], bevDollar[i]));
                 }
 
                 total = new TextField();
+                total.setPrefWidth(15);
                 total.setText(Double.toString(totalDollars));
+                menu.add(total, 18, 4);
 
-                menu.add(total, 12, 12);
+                Label amount = new Label("Total amount: ");
+                menu.add(amount, 17, 4);
             }
         });
-
-        menu.add(update, 5, 15);
+        update.setPrefSize(100, 50);
+        menu.add(update, 17, 3);
 
         Button order = new Button("Order now!");
         order.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(totalDollars == 0)
+
+                if(restaurantTable.getItems().isEmpty())
                 {
                     //pop up message to user that user has to order somthing in order to go to ORDER page.
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -1511,18 +1508,16 @@ public class Main extends Application {
                     {
                         guestInfo();
                         guestInfo.show();
-
                     }
                     else {
                         orderMenu();
-
                         orderStage.show();
                     }
                 }
-
             }
         });
-        menu.add(order, 16, 12);
+        order.setPrefSize(100,50);
+        menu.add(order, 18, 3);
 
         GridPane imageArea = new GridPane();
         ImageView image = new ImageView(new Image(Main.class.getResourceAsStream("CANADIAN.PNG")));
@@ -1530,20 +1525,21 @@ public class Main extends Application {
         image.setFitHeight(200);
         imageArea.add(image, 1, 1, 50, 50);
 
+        Image back = new Image("http://www.justbringthechocolate.com/wp-content/uploads/2011/01/Background-500x230@2x.png");
+        menuLayout.setBackground(new Background(new BackgroundImage(back, BackgroundRepeat.REPEAT,
+                BackgroundRepeat.REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT)));
+
         menuLayout.setTop(menu);
         menuLayout.setCenter(imageArea);
-        menuLayout.setRight(table);
+        menuLayout.setRight(restaurantTable);
         canMenuStage.setTitle("Canadian burger restaurant Menu");
         canMenuStage.setScene(new Scene(menuLayout, 800, 700));
     }
     private boolean decideUserType()
     {
-        if(checkUserType == 1)
-        {
-            return false;
-        }
-        else
-            return true;
+        return checkUserType != 1;
     }
 
     private static boolean loginValidate(String checkID, String checkPw) throws Exception
@@ -1570,9 +1566,8 @@ public class Main extends Application {
             //validating phone number with extension length from 3 to 5
         else if(phoneNo.matches("\\d{3}-\\d{3}-\\d{4}\\s(x|(ext))\\d{3,5}")) return true;
             //validating phone number where area code is in braces ()
-        else if(phoneNo.matches("\\(\\d{3}\\)-\\d{3}-\\d{4}")) return true;
-            //return false if nothing matches the input
-        else return false;
+        else //return false if nothing matches the input
+            return phoneNo.matches("\\(\\d{3}\\)-\\d{3}-\\d{4}");
 
     }
 
@@ -1588,6 +1583,8 @@ public class Main extends Application {
         return lastName.matches( "[A-Z][a-zA-Z]*" );
     } // end method validateLastName
 
+
+    //Order Menu Stage is to see the summary
     public void orderMenu(){
         orderStage = new Stage();
 
@@ -1596,6 +1593,7 @@ public class Main extends Application {
         totalArea.setVgap(10);
         totalArea.setHgap(10);
 
+        //label for subtotal, tips, hst, and total
         Label subTotalLabel = new Label("SubTotal :");
         totalArea.add(subTotalLabel,0,0);
 
@@ -1608,6 +1606,7 @@ public class Main extends Application {
         Label totalLabel = new Label("Total : ");
         totalArea.add(totalLabel,0,3);
 
+        //textfield for the subtotal, tip, hst, total
         TextField subTotalField = new TextField();
         TextField tipField = new TextField();
         TextField hstField = new TextField();
@@ -1622,10 +1621,12 @@ public class Main extends Application {
         totalArea.add(hstField,1,2);
         totalArea.add(totalField,1,3);
 
+        //tip, hst and final total calculation
         double tip = totalDollars * 0.1;
         double hst = totalDollars * 0.13;
         double finalTotal = tip + hst + totalDollars;
 
+        //put the subtotal, hst,tip, total in the text field
         subTotalField.setText(Double.toString(totalDollars));
         hstField.setText(Double.toString(hst));
         tipField.setText(Double.toString(tip));
@@ -1651,10 +1652,10 @@ public class Main extends Application {
         summaryArea.add(emailSummary,2,0);
 
         Label phoneSummary = new Label("Phone #");
-        summaryArea.add(phoneSummary,4,0);
+        summaryArea.add(phoneSummary,0,2);
 
         Label addressSummary = new Label("Address");
-        summaryArea.add(addressSummary,6,0);
+        summaryArea.add(addressSummary,2,2);
 
         TextField nameSummaryField = new TextField();
         TextField emailSummaryField = new TextField();
@@ -1667,12 +1668,57 @@ public class Main extends Application {
 
         summaryArea.add(nameSummaryField,0,1);
         summaryArea.add(emailSummaryField,2,1);
-        summaryArea.add(phoneSummaryField,4,1);
-        summaryArea.add(addressSummaryField,6,1);
+        summaryArea.add(phoneSummaryField,0,3);
+        summaryArea.add(addressSummaryField,2,3);
+
+        //combo box for the payment method, cash, debit, credit
+        Label payLabel = new Label("Payment method");
+        summaryArea.add(payLabel, 2, 4);
+        ObservableList<String> paymentOptions =
+                FXCollections.observableArrayList(
+                        "Cash",
+                        "Debit",
+                        "Credit"
+                );
+        final ComboBox<String> payment = new ComboBox<String>(paymentOptions);
+        summaryArea.add(payment, 3, 4);
+
+        //payment method has to be chosen before finalize button works
+        //finalize button is to end the order.
+        Button finalize = new Button("Finalize!");
+        finalize.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //if the user didn't choose the payment method, then user cannot end the order process
+                if(payment.getValue() == null){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("ERROR!");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please choose payment method");
+
+                    alert.showAndWait();
+                }
+                else {
+                    //order process end message
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("THANK YOU!");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Your order has been processed. Thank you for using FoodDelivery!");
+
+                    alert.showAndWait();
+
+                    //close the program
+                    System.exit(0);
+                }
+            }
+        });
+        finalize.setPrefSize(100,50);
+        summaryArea.add(finalize, 2, 5);
 
         try {
-
             File file;
+
+            //if the user is guest, then read the guestInfoData.csv and put those values in textfield for summary
             if (loginId.equals("")) {
                 file = new File("Data/guestInfoData.csv");
                 BufferedReader bf = new BufferedReader(new FileReader(file));
@@ -1686,6 +1732,8 @@ public class Main extends Application {
                 }
             } else
             {
+                //if the user is the login user, then read the info from userInformation.csv
+                //read only address, phone, email, name. These four value has to match Login Id.
                 file = new File("Data/userInformation.csv");
                 BufferedReader bf = new BufferedReader(new FileReader(file));
                 String line;
@@ -1706,13 +1754,20 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
+        summaryArea.add(restaurantTable, 0, 6);
+
         BorderPane orderLayout = new BorderPane();
         orderLayout.setCenter(summaryArea);
         orderLayout.setBottom(totalArea);
         orderLayout.setTop(orderTitleArea);
 
-        orderStage.setTitle("Canadian burger restaurant Menu");
-        orderStage.setScene(new Scene(orderLayout, 800, 700));
+        Image image = new Image("http://www.justbringthechocolate.com/wp-content/uploads/2011/01/Background-500x230@2x.png");
+        orderLayout.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT,
+                BackgroundRepeat.REPEAT,
+                BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT)));
+        orderStage.setTitle("ORDER SUMMARY");
+        orderStage.setScene(new Scene(orderLayout, 600, 700));
     }
 
     public void guestInfo(){
@@ -1840,6 +1895,7 @@ public class Main extends Application {
                 else
                     guestErrorAddress.setText("");
 
+                //if there is no error, then continue..
                 if(guestInfoErrorCount == 0)
                 {
                     try
@@ -1891,10 +1947,6 @@ public class Main extends Application {
         guestInfo.show();
 
     }
-
-
-
-
     public static void main(String[] args) {
         launch(args);
     }
