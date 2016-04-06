@@ -63,6 +63,7 @@ public class Main extends Application {
 
         //login area
         loginPage = new Stage;
+
         GridPane loginArea = new GridPane();
         loginArea.setPadding(new Insets(10,10,10,10));
         loginArea.setVgap(10);
